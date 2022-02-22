@@ -1,0 +1,169 @@
+micronaut:
+  application:
+    name: cosmonaut_nomina
+    default-charset: UTF-8
+  server:
+    port: 8080
+    cors:
+      enabled: true
+  http:
+    client:
+      read-timeout: 15s
+  security:
+    enabled: true
+    endpoints:
+      login:
+        enabled: false
+      logout:
+        enabled: false
+      keys:
+        enabled: false
+      introspection:
+        enabled: false
+    authentication: bearer
+    token:
+      jwt:
+        generator:
+          access-token:
+            expiration: 3600
+          refresh-token:
+            enabled: false
+            secret: '"${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}"'
+        signatures:
+          secret:
+            generator:
+              secret: '"${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}"'
+    intercept-url-map:
+      - pattern: /swagger/**
+        http-method: GET
+        access:
+          - isAnonymous()
+      - pattern: /rapidoc/**
+        http-method: GET
+        access:
+          - isAnonymous()
+      - pattern: /swagger-ui/**
+        http-method: GET
+        access:
+          - isAnonymous()
+      - pattern: /redoc/**
+        http-method: GET
+        access:
+          - isAnonymous()
+      - pattern: /dispersion/respuesta/stp/**
+        http-method: POST
+        access:
+          - isAnonymous()
+      - pattern: /dispersion/respuesta/banpay/**
+        http-method: POST
+        access:
+          - isAnonymous()
+      - pattern: /dispersion/respuesta/complementaria/stp/**
+        http-method: POST
+        access:
+          - isAnonymous()
+      - pattern: /timbrado/respuesta/**
+        http-method: POST
+        access:
+          - isAnonymous()
+      - pattern: /health/liveness
+        http-method: GET
+        access:
+          - isAnonymous()
+      - pattern: /health/readiness
+        http-method: GET
+        access:
+          - isAnonymous()
+      - pattern: /**
+        http-method: OPTIONS
+        access:
+          - isAnonymous()
+      - pattern: /**
+        access:
+          - isAnonymous()
+
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      rapidoc:
+        paths: classpath:META-INF/swagger/views/rapidoc
+        mapping: /rapidoc/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+      redoc:
+        paths: classpath:META-INF/swagger/views/redoc
+        mapping: /redoc/**
+
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/cosmonaut
+    driverClassName: org.postgresql.Driver
+    username: cosmonaut
+    password: 'c0ns0l1d4MX_2021'
+    schema-generate: NONE
+    dialect: POSTGRES
+
+servicio:
+  dispersion-timbrado:
+    host: "https://us-central1-cosmonaut-299500.cloudfunctions.net"
+    urlCallback:
+      dispersion:
+        stp: "https://cosmonautdev.wintermute.services/nomina/dispersion/respuesta/stp"
+        banpay: "https://cosmonautdev.wintermute.services/nomina/dispersion/respuesta/banpay"
+      timbrado: "https://cosmonautdev.wintermute.services/nomina/timbrado/respuesta/"
+    timbres:
+      path: "/cosmonaut-timbres"
+    timbrado:
+      path: "/cosmonaut-cfdi"
+    rfc:
+      path: "/cosmonaut-rfc"
+    recepcion:
+      path: "/cosmonaut-recepcion-dispersion"
+    dispersion:
+      path: "/cosmonaut-dispersion-async"
+  orquestador:
+    host: "https://cosmonautdev.wintermute.services/orquestador"
+    path: "/nomina/getCalc"
+  cms:
+    host: "https://34.75.54.120/cms"
+    catalogo:
+      multimedios:
+        obtener:
+          path: "/cats/multimedias/"
+      tipo-documentos:
+        obtener:
+          path: "/cats/tiposDocumentos/"
+        guardar:
+          path: "/cats/tiposDocumentos/crear"
+        eliminar:
+          path: "/cats/tiposDocumentos/eliminar"
+        modificar:
+          path: "/cats/tiposDocumentos/modificar"
+    expediente:
+      guardar:
+        path: "/expediente/crear"
+      obtener:
+        path: "/expediente/detalle?clave="
+    documentos:
+      subir:
+        path: "/archivos/upload"
+      versionar:
+        path: "/archivos/version"
+      remplazar:
+        path: "/archivos/replace"
+      descargar:
+        path: "/archivos/download?idArch="
+      eliminar:
+        path: "/archivos/delete/"
+  csd:
+    host: "https://us-central1-cosmonaut-299500.cloudfunctions.net"
+    path: "/cosmonaut-csd"
+    imss:
+      host: "https://us-central1-cosmonaut-299500.cloudfunctions.net"
+      path: "/cosmonaut-imss?operacion="
+    orquestador:
+      host: "https://cosmonautdev.wintermute.services"
+      path: "/orquestador/nomina/getCalc"

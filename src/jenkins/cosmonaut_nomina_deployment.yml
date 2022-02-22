@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "cosmonaut-nomina"
+spec:
+  selector:
+    matchLabels:
+      app: "cosmonaut-nomina"
+  template:
+    metadata:
+      labels:
+        app: "cosmonaut-nomina"
+    spec:
+      serviceAccountName: cosmonaut-services
+      containers:
+        - name: "cosmonaut-nomina"
+          image: "gcr.io/cosmonaut-299500/cosmonaut/nomina:$TAG"
+          env:
+            - name: MICRONAUT_APPLICATION_JSON
+              value: '{"kubernetes":{ "client":{ "config-maps":{"enabled":true,"labels":[{"environment":"dev"}]}, "secrets":{"enabled":true,"labels":[{"environment":"dev"}]} }}}'
+            - name: APLICACION_PUERTO
+              value: "8080" 
+            - name: JAVA_OPTS
+              value: "-Djdk.tls.client.protocols=TLSv1.2"
+          ports:
+            - name: web
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 10

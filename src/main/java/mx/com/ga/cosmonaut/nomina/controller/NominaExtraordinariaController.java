@@ -42,6 +42,7 @@ public class NominaExtraordinariaController {
         }
     }
 
+
     @BitacoraSistema
     @BitacoraNomina
     @Operation(summary = "${cosmonaut.controller.nominaextraordinaria.calculo.nominaextraordinariaaguinaldo.resumen}",

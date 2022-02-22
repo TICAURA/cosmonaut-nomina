@@ -160,7 +160,7 @@ public class OrquestadorTests {
     @Order(6)
     void testRecalculaOrdinaria() throws ServiceException {
         RespuestaGenerica respuesta = calculoNominaOrdinariaServices.reCalculoNomina(1636);
-        LOG.info("Respuesta {}", respuesta.getDatos());
+        LOG.info("Respuesta { }", respuesta.getDatos());
         assertTrue(respuesta.isResultado());
     }
 

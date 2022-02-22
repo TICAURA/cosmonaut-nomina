@@ -111,9 +111,9 @@ servicio:
     host: "https://us-central1-cosmonaut-299500.cloudfunctions.net"
     urlCallback:
       dispersion:
-        stp: "https://cosmonautdev.wintermute.services/nomina/dispersion/respuesta/stp"
-        banpay: "https://cosmonautdev.wintermute.services/nomina/dispersion/respuesta/banpay"
-      timbrado: "https://cosmonautdev.wintermute.services/nomina/timbrado/respuesta/"
+        stp: "https://back.cosmonaut.tech/nomina/dispersion/respuesta/stp"
+        banpay: "https://back.cosmonaut.tech/nomina/dispersion/respuesta/banpay"
+      timbrado: "https://back.cosmonaut.tech/nomina/timbrado/respuesta/"
     timbres:
       path: "/cosmonaut-timbres"
     timbrado:
@@ -125,7 +125,7 @@ servicio:
     dispersion:
       path: "/cosmonaut-dispersion-async"
   orquestador:
-    host: "https://cosmonautdev.wintermute.services/orquestador"
+    host: "https://back.cosmonaut.tech/orquestador"
     path: "/nomina/getCalc"
   cms:
     host: "https://34.75.54.120/cms"
@@ -165,5 +165,5 @@ servicio:
       host: "https://us-central1-cosmonaut-299500.cloudfunctions.net"
       path: "/cosmonaut-imss?operacion="
     orquestador:
-      host: "https://cosmonautdev.wintermute.services"
+      host: "https://back.cosmonaut.tech"
       path: "/orquestador/nomina/getCalc"

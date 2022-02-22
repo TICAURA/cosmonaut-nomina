@@ -12,7 +12,7 @@ podTemplate(containers:[
         container('gradle'){
             script{
 			   git url: 'https://github.com/ASG-BPM/cosmonaut-nomina',branch:'main',credentialsId: 'winter_user'
-			   tag = sh(script:'git describe --tags --always `git rev-list --tags` | grep DEV | head -1',returnStdout: true ).trim()
+			   tag = sh(script:'git describe --tags --always `git rev-list --tags` | grep PROD | head -1',returnStdout: true ).trim()
 			   sh "git checkout $tag"
 			   sh "gradle assemble -Ptag=$tag"
 		   }
@@ -33,7 +33,7 @@ podTemplate(containers:[
 		      sh "gcloud container clusters get-credentials qa-backend-cosmonaut --region=us-east1-b --project=cosmonaut-uat"
 		      sh 'ssh-keygen -t rsa -q -f "$HOME/.ssh/id_rsa" -N ""'
 		      sh ('gcloud beta compute ssh --quiet --zone "us-east1-b" "qa-vpn-cosmonaut" --project "cosmonaut-uat" -- -N -L127.0.0.1:443:10.147.1.2:443 & > /tmp/out.txt')
-		      sh 'sleep 120'
+		      sh 'sleep 90'
 		      sh "sed -i 's/10.147.1.2/127.0.0.1/' /root/.kube/config"
 		      sh "kubectl  --insecure-skip-tls-verify config view"
 		      sh "kubectl  --insecure-skip-tls-verify get pods"

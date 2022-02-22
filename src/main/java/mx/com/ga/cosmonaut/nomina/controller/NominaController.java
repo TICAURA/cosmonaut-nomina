@@ -35,6 +35,7 @@ public class NominaController {
             return HttpResponse.badRequest(Utilidades.respuestaError());
         }
     }
+		
 
     @Operation(summary = "${cosmonaut.controller.calculo.consultaestatus.resumen}",
             description = "${cosmonaut.controller.calculo.consultaestatus.descripcion}",
